@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cz.habrondrej.garden.model.BaseFragment;
-
 public class OverviewFragment extends BaseFragment {
 
     @Override

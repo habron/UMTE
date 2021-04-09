@@ -47,17 +47,16 @@ public class LoginFragment extends Fragment {
             case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
                 msgText.setText("Vaše zařízení nemá senzor otisku prstu."); //TODO goto login via code
                 break;
-            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                msgText.setText("Senzor otisku prstu není momentálně dostupný.");
-                break;
             case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
                 final Intent enrollIntent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
                 enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED, BIOMETRIC_STRONG | DEVICE_CREDENTIAL);
                 startActivityForResult(enrollIntent, 0);
                 break;
+            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
             case BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED:
             case BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED:
             case BiometricManager.BIOMETRIC_STATUS_UNKNOWN:
+                msgText.setText("Senzor otisku prstu není momentálně dostupný.");
                 break;
         }
 

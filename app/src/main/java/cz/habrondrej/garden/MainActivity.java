@@ -21,13 +21,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void checkAutentication(NavController navController) {
-        if (!user.isAuthenticated()) {
-            navController.navigate(R.id.LoginFragment);
-        }
-    }
-
-
     public User getUser() {
         return user;
     }
