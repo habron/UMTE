@@ -55,4 +55,16 @@ public class UserDatabase extends DatabaseHelper {
 
         throw new IllegalStateException("Can not get user!");
     }
+
+
+    public boolean update(User user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_USERNAME, user.getUsername());
+        cv.put(COLUMN_PASSWORD, user.getPasswordHash());
+
+        int update = db.update(USER_TABLE, cv, COLUMN_ID + " = ?", new String[]{String.valueOf(user.getId())});
+
+        return update > 0;
+    }
 }
