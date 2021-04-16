@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import androidx.annotation.Nullable;
-import cz.habrondrej.garden.database.IRepository;
 import cz.habrondrej.garden.database.DatabaseHelper;
 
 public abstract class CategoryDatabase<T> extends DatabaseHelper<T> {
@@ -14,6 +13,20 @@ public abstract class CategoryDatabase<T> extends DatabaseHelper<T> {
 
     public CategoryDatabase(@Nullable Context context) {
         super(context);
+    }
+
+    public static void onCreateDB(SQLiteDatabase db) {
+        GroupDatabase.onCreateCatDB(db);
+        PlaceDatabase.onCreateCatDB(db);
+        SpeciesDatabase.onCreateCatDB(db);
+        TypeDatabase.onCreateCatDB(db);
+    }
+
+    public static void onUpgradeDB(SQLiteDatabase db, int oldVersion, int newVersion) {
+        GroupDatabase.onUpgradeCatDB(db, oldVersion, newVersion);
+        PlaceDatabase.onUpgradeCatDB(db, oldVersion, newVersion);
+        SpeciesDatabase.onUpgradeCatDB(db, oldVersion, newVersion);
+        TypeDatabase.onUpgradeCatDB(db, oldVersion, newVersion);
     }
 
     protected boolean deleteById(int id, String tableName) {

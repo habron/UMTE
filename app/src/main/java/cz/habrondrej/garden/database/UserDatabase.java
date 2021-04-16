@@ -33,8 +33,7 @@ public class UserDatabase extends DatabaseHelper<User> {
     }
 
 
-    public static void onCreateDB(@NotNull SQLiteDatabase db) {
-        System.out.println("User onCreate");
+    protected static void onCreateDB(@NotNull SQLiteDatabase db) {
         db.execSQL(DATABASE_CREATE_TABLE);
 
         ContentValues cv = new ContentValues();
@@ -44,7 +43,7 @@ public class UserDatabase extends DatabaseHelper<User> {
     }
 
 
-    public static void onUpgradeDB(@NotNull SQLiteDatabase db, int oldVersion, int newVersion) {
+    protected static void onUpgradeDB(@NotNull SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreateDB(db);
     }

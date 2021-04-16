@@ -1,6 +1,5 @@
 package cz.habrondrej.garden.database;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -8,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.jetbrains.annotations.NotNull;
 
 import androidx.annotation.Nullable;
+import cz.habrondrej.garden.database.categories.CategoryDatabase;
 import cz.habrondrej.garden.database.categories.GroupDatabase;
 import cz.habrondrej.garden.database.categories.PlaceDatabase;
 import cz.habrondrej.garden.database.categories.SpeciesDatabase;
@@ -28,20 +28,14 @@ public abstract class DatabaseHelper<T> extends SQLiteOpenHelper implements IRep
     @Override
     public void onCreate(@NotNull SQLiteDatabase db) {
         UserDatabase.onCreateDB(db);
-        GroupDatabase.onCreateDB(db);
-        PlaceDatabase.onCreateDB(db);
-        SpeciesDatabase.onCreateDB(db);
-        TypeDatabase.onCreateDB(db);
+        CategoryDatabase.onCreateDB(db);
         PlantDatabase.onCreateDB(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         UserDatabase.onUpgradeDB(db, oldVersion, newVersion);
-        GroupDatabase.onUpgradeDB(db, oldVersion, newVersion);
-        PlaceDatabase.onUpgradeDB(db, oldVersion, newVersion);
-        SpeciesDatabase.onUpgradeDB(db, oldVersion, newVersion);
-        TypeDatabase.onUpgradeDB(db, oldVersion, newVersion);
+        CategoryDatabase.onUpgradeDB(db, oldVersion, newVersion);
         PlantDatabase.onUpgradeDB(db, oldVersion, newVersion);
     }
 

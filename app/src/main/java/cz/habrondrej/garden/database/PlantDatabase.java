@@ -52,12 +52,11 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
         super(context);
     }
 
-    public static void onCreateDB(@NotNull SQLiteDatabase db) {
-        System.out.println("Plants onCreate");
+    protected static void onCreateDB(@NotNull SQLiteDatabase db) {
         db.execSQL(DATABASE_CREATE_TABLE);
     }
 
-    public static void onUpgradeDB(@NotNull SQLiteDatabase db, int oldVersion, int newVersion) {
+    protected static void onUpgradeDB(@NotNull SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreateDB(db);
     }

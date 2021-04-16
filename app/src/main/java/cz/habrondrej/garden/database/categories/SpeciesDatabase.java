@@ -27,13 +27,13 @@ public class SpeciesDatabase extends CategoryDatabase<Species> {
         super(context);
     }
 
-    public static void onCreateDB(@NotNull SQLiteDatabase db) {
+    protected static void onCreateCatDB(@NotNull SQLiteDatabase db) {
         db.execSQL(DATABASE_CREATE_TABLE);
     }
 
-    public static void onUpgradeDB(@NotNull SQLiteDatabase db, int oldVersion, int newVersion) {
+    protected static void onUpgradeCatDB(@NotNull SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreateDB(db);
+        onCreateCatDB(db);
     }
 
     @Override
