@@ -27,15 +27,18 @@ public class Plant {
 
     private Type type;
 
+    private final boolean archive;
 
-    public Plant(int id, String title, Date date, String description) {
+
+    public Plant(int id, String title, @Nullable Date date, String description) {
         this.id = id;
         this.title = title;
         this.date = date;
         this.description = description;
+        this.archive = false;
     }
 
-    public Plant(int id, String title, Date date, String description, @Nullable Group group, @Nullable Place place, @Nullable Species species, @Nullable Type type) {
+    public Plant(int id, String title, @Nullable Date date, String description, @Nullable Group group, @Nullable Place place, @Nullable Species species, @Nullable Type type, boolean archive) {
         this.id = id;
         this.title = title;
         this.date = date;
@@ -44,6 +47,7 @@ public class Plant {
         this.place = place;
         this.species = species;
         this.type = type;
+        this.archive = archive;
     }
 
     public int getId() {
@@ -76,5 +80,9 @@ public class Plant {
 
     public Type getType() {
         return type;
+    }
+
+    public boolean isArchive() {
+        return archive;
     }
 }

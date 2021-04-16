@@ -1,12 +1,19 @@
 package cz.habrondrej.garden.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
 
-public abstract class DatabaseHelper extends SQLiteOpenHelper {
+import androidx.annotation.Nullable;
+import cz.habrondrej.garden.database.categories.GroupDatabase;
+import cz.habrondrej.garden.database.categories.PlaceDatabase;
+import cz.habrondrej.garden.database.categories.SpeciesDatabase;
+import cz.habrondrej.garden.database.categories.TypeDatabase;
+
+public abstract class DatabaseHelper<T> extends SQLiteOpenHelper implements IRepository<T> {
 
     public static final int DB_VERSION = 1;
 
@@ -16,6 +23,26 @@ public abstract class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+    }
+
+    @Override
+    public void onCreate(@NotNull SQLiteDatabase db) {
+        UserDatabase.onCreateDB(db);
+        GroupDatabase.onCreateDB(db);
+        PlaceDatabase.onCreateDB(db);
+        SpeciesDatabase.onCreateDB(db);
+        TypeDatabase.onCreateDB(db);
+        PlantDatabase.onCreateDB(db);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        UserDatabase.onUpgradeDB(db, oldVersion, newVersion);
+        GroupDatabase.onUpgradeDB(db, oldVersion, newVersion);
+        PlaceDatabase.onUpgradeDB(db, oldVersion, newVersion);
+        SpeciesDatabase.onUpgradeDB(db, oldVersion, newVersion);
+        TypeDatabase.onUpgradeDB(db, oldVersion, newVersion);
+        PlantDatabase.onUpgradeDB(db, oldVersion, newVersion);
     }
 
 }
