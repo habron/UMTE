@@ -8,10 +8,6 @@ import org.jetbrains.annotations.NotNull;
 
 import androidx.annotation.Nullable;
 import cz.habrondrej.garden.database.categories.CategoryDatabase;
-import cz.habrondrej.garden.database.categories.GroupDatabase;
-import cz.habrondrej.garden.database.categories.PlaceDatabase;
-import cz.habrondrej.garden.database.categories.SpeciesDatabase;
-import cz.habrondrej.garden.database.categories.TypeDatabase;
 
 public abstract class DatabaseHelper<T> extends SQLiteOpenHelper implements IRepository<T> {
 
