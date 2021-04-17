@@ -1,16 +1,15 @@
 package cz.habrondrej.garden.database;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -33,6 +32,11 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
     public static final String COLUMN_TYPE_ID = "TYPE_ID";
     public static final String COLUMN_ARCHIVE = "ARCHIVE";
 
+    private GroupDatabase groupDatabase;
+    private PlaceDatabase placeDatabase;
+    private SpeciesDatabase speciesDatabase;
+    private TypeDatabase typeDatabase;
+
     private static final String DATABASE_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_TITLE + " TEXT, " +
@@ -50,6 +54,10 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
 
     public PlantDatabase(@Nullable Context context) {
         super(context);
+        groupDatabase = new GroupDatabase(context);
+        placeDatabase = new PlaceDatabase(context);
+        speciesDatabase = new SpeciesDatabase(context);
+        typeDatabase = new TypeDatabase(context);
     }
 
     protected static void onCreateDB(@NotNull SQLiteDatabase db) {
@@ -62,13 +70,43 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
     }
 
     @Override
-    public boolean create(Plant category) {
-        return false;
+    public boolean create(@NotNull Plant plant) {
+        ContentValues cv = new ContentValues();
+        SQLiteDatabase db = getWritableDatabase();
+
+        cv.put(COLUMN_TITLE, plant.getTitle());
+        cv.put(COLUMN_DATE, plant.getDate().toString());
+        cv.put(COLUMN_DESCRIPTION, plant.getDescription());
+        cv.put(COLUMN_GROUP_ID, plant.getGroup().getId());
+        cv.put(COLUMN_PLACE_ID, plant.getPlace().getId());
+        cv.put(COLUMN_SPECIES_ID, plant.getSpecies().getId());
+        cv.put(COLUMN_TYPE_ID, plant.getType().getId());
+        cv.put(COLUMN_ARCHIVE, plant.isArchive());
+        long insert = db.insert(TABLE_NAME, null, cv);
+
+        return insert > 0;
     }
 
     @Override
     public Plant getOneById(int id) throws IndexOutOfBoundsException {
-        return null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE id = ?";
+        @SuppressLint("Recycle") Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+
+        if (cursor.moveToFirst()) {
+            String title = cursor.getString(cursor.getColumnIndex(COLUMN_TITLE));
+            LocalDate date = LocalDate.parse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
+            String description = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION));
+            int groupId = cursor.getInt(cursor.getColumnIndex(COLUMN_GROUP_ID));
+            int placeId = cursor.getInt(cursor.getColumnIndex(COLUMN_PLACE_ID));
+            int speciesId = cursor.getInt(cursor.getColumnIndex(COLUMN_SPECIES_ID));
+            int typeId = cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE_ID));
+            boolean archive = cursor.getInt(cursor.getColumnIndex(COLUMN_ARCHIVE)) > 0;
+
+            return new Plant(id, title, date, description, groupDatabase.getOneById(groupId), placeDatabase.getOneById(placeId),
+                    speciesDatabase.getOneById(speciesId), typeDatabase.getOneById(typeId), archive);
+        }
+        throw new IndexOutOfBoundsException();
     }
 
     @Override
@@ -78,7 +116,6 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
 
     public List<Plant> getAll(boolean isArchive) {
         List<Plant> plants = new ArrayList<>();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ARCHIVE + " = ?";
@@ -88,13 +125,7 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
                 int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
                 String title = cursor.getString(cursor.getColumnIndex(COLUMN_TITLE));
                 String description = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION));
-
-                Date date = null;
-                try {
-                    date = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                LocalDate date = LocalDate.parse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
 
                 plants.add(new Plant(id, title, date, description));
                 cursor.moveToNext();
@@ -105,12 +136,28 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
     }
 
     @Override
-    public boolean update(Plant category) {
-        return false;
+    public boolean update(Plant plant) {
+        ContentValues cv = new ContentValues();
+        SQLiteDatabase db = getWritableDatabase();
+
+        cv.put(COLUMN_TITLE, plant.getTitle());
+        cv.put(COLUMN_DATE, plant.getDate().toString());
+        cv.put(COLUMN_DESCRIPTION, plant.getDescription());
+        cv.put(COLUMN_GROUP_ID, plant.getGroup().getId());
+        cv.put(COLUMN_PLACE_ID, plant.getPlace().getId());
+        cv.put(COLUMN_SPECIES_ID, plant.getSpecies().getId());
+        cv.put(COLUMN_TYPE_ID, plant.getType().getId());
+        cv.put(COLUMN_ARCHIVE, plant.isArchive());
+        long update = db.update(TABLE_NAME, cv, COLUMN_ID + " = ?", new String[]{String.valueOf(plant.getId())});
+
+        return update > 0;
     }
 
     @Override
     public boolean deleteById(int id) {
-        return false;
+        SQLiteDatabase db = getWritableDatabase();
+        int delete = db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+
+        return delete > 0;
     }
 }

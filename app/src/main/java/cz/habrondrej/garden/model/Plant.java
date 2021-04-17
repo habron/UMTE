@@ -2,7 +2,7 @@ package cz.habrondrej.garden.model;
 
 import androidx.annotation.Nullable;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import cz.habrondrej.garden.model.categories.Group;
 import cz.habrondrej.garden.model.categories.Place;
@@ -15,7 +15,7 @@ public class Plant {
 
     private final String title;
 
-    private final Date date;
+    private final LocalDate date;
 
     private final String description;
 
@@ -30,7 +30,7 @@ public class Plant {
     private final boolean archive;
 
 
-    public Plant(int id, String title, @Nullable Date date, String description) {
+    public Plant(int id, String title, @Nullable LocalDate date, String description) {
         this.id = id;
         this.title = title;
         this.date = date;
@@ -38,7 +38,7 @@ public class Plant {
         this.archive = false;
     }
 
-    public Plant(int id, String title, @Nullable Date date, String description, @Nullable Group group, @Nullable Place place, @Nullable Species species, @Nullable Type type, boolean archive) {
+    public Plant(int id, String title, @Nullable LocalDate date, String description, @Nullable Group group, @Nullable Place place, @Nullable Species species, @Nullable Type type, boolean archive) {
         this.id = id;
         this.title = title;
         this.date = date;
@@ -58,7 +58,7 @@ public class Plant {
         return title;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
