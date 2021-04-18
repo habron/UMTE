@@ -11,7 +11,18 @@
         android:label="Overview Fragment"
         tools:layout="@layout/fragment_overview">
 
+        <action
+            android:id="@+id/action_OverviewFragment_to_PlantNewFragment"
+            app:destination="@id/PlantNewFragment" />
+
     </fragment>
+    <fragment
+        android:id="@+id/PlantNewFragment"
+        android:name="cz.habrondrej.garden.PlantNewFragment"
+        android:label="Plant new Fragment"
+        tools:layout="@layout/fragment_plant_new">
+    </fragment>
+
     <fragment
         android:id="@+id/LoginFragment"
         android:name="cz.habrondrej.garden.LoginFragment"

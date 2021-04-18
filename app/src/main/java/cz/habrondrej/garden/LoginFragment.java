@@ -13,7 +13,9 @@ import android.widget.Toast;
 import java.util.concurrent.Executor;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.Toolbar;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
@@ -34,6 +36,9 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle("");
 
         TextView msgText = view.findViewById(R.id.txt_msg);
 
@@ -70,7 +75,6 @@ public class LoginFragment extends Fragment {
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                Toast.makeText(view.getContext(), "Přihlášení úspěšné", Toast.LENGTH_SHORT).show();
                 MainActivity mainActivity = (MainActivity) requireActivity();
                 mainActivity.getUser().setAuthenticated(true);
                 NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.OverviewFragment);
