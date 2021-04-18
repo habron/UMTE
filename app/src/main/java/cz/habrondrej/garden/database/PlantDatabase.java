@@ -18,6 +18,7 @@ import cz.habrondrej.garden.database.categories.PlaceDatabase;
 import cz.habrondrej.garden.database.categories.SpeciesDatabase;
 import cz.habrondrej.garden.database.categories.TypeDatabase;
 import cz.habrondrej.garden.model.Plant;
+import cz.habrondrej.garden.utils.DateParser;
 
 public class PlantDatabase extends DatabaseHelper<Plant> {
 
@@ -75,12 +76,12 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
         SQLiteDatabase db = getWritableDatabase();
 
         cv.put(COLUMN_TITLE, plant.getTitle());
-        cv.put(COLUMN_DATE, plant.getDate().toString());
+        cv.put(COLUMN_DATE, plant.getDate() == null ? null : plant.getDate().toString());
         cv.put(COLUMN_DESCRIPTION, plant.getDescription());
-        cv.put(COLUMN_GROUP_ID, plant.getGroup().getId());
-        cv.put(COLUMN_PLACE_ID, plant.getPlace().getId());
-        cv.put(COLUMN_SPECIES_ID, plant.getSpecies().getId());
-        cv.put(COLUMN_TYPE_ID, plant.getType().getId());
+        cv.put(COLUMN_GROUP_ID, plant.getGroup() == null ? null : plant.getGroup().getId());
+        cv.put(COLUMN_PLACE_ID, plant.getPlace() == null ? null : plant.getPlace().getId());
+        cv.put(COLUMN_SPECIES_ID, plant.getSpecies() == null ? null : plant.getSpecies().getId());
+        cv.put(COLUMN_TYPE_ID, plant.getType() == null ? null : plant.getType().getId());
         cv.put(COLUMN_ARCHIVE, plant.isArchive());
         long insert = db.insert(TABLE_NAME, null, cv);
 
@@ -95,7 +96,7 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
 
         if (cursor.moveToFirst()) {
             String title = cursor.getString(cursor.getColumnIndex(COLUMN_TITLE));
-            LocalDate date = LocalDate.parse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
+            LocalDate date = DateParser.parseDate(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
             String description = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION));
             int groupId = cursor.getInt(cursor.getColumnIndex(COLUMN_GROUP_ID));
             int placeId = cursor.getInt(cursor.getColumnIndex(COLUMN_PLACE_ID));
@@ -119,13 +120,14 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
 
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ARCHIVE + " = ?";
-        @SuppressLint("Recycle") Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(isArchive)});
+        @SuppressLint("Recycle") Cursor cursor = db.rawQuery(query, new String[]{isArchive ? "1" : "0"});
+
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
                 String title = cursor.getString(cursor.getColumnIndex(COLUMN_TITLE));
                 String description = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION));
-                LocalDate date = LocalDate.parse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
+                LocalDate date = DateParser.parseDate(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
 
                 plants.add(new Plant(id, title, date, description));
                 cursor.moveToNext();

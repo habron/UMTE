@@ -21,6 +21,10 @@
         android:name="cz.habrondrej.garden.PlantNewFragment"
         android:label="Plant new Fragment"
         tools:layout="@layout/fragment_plant_new">
+
+        <action
+            android:id="@+id/action_PlantNewFragment_to_OverviewFragment"
+            app:destination="@id/OverviewFragment" />
     </fragment>
 
     <fragment

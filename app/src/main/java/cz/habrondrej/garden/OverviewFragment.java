@@ -3,7 +3,6 @@ package cz.habrondrej.garden;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,14 +12,22 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import cz.habrondrej.garden.adapters.PlantsAdapter;
 import cz.habrondrej.garden.database.PlantDatabase;
 import cz.habrondrej.garden.model.Plant;
 
 public class OverviewFragment extends BaseFragment {
 
+    private RecyclerView recyclerView;
+    private PlantsAdapter plantsAdapter;
+    private RecyclerView.LayoutManager layoutManager;
     private PlantDatabase plantDatabase;
+
+    public OverviewFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,10 +38,10 @@ public class OverviewFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        plantDatabase = ((MainActivity) getActivity()).getPlantDatabase();
 
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Přehled");
-
         BottomNavigationView bottomNav = view.findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -49,7 +56,19 @@ public class OverviewFragment extends BaseFragment {
             return false;
         });
 
-        plantDatabase = new PlantDatabase(requireContext());
+        initRecyclerView(view);
+
+    }
+
+    private void initRecyclerView(View view) {
+        recyclerView = view.findViewById(R.id.lv_plantList);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
         List<Plant> plants = plantDatabase.getAll();
+
+        plantsAdapter = new PlantsAdapter(plants, getContext());
+        recyclerView.setAdapter(plantsAdapter);
     }
 }
