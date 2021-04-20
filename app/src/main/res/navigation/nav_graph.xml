@@ -25,6 +25,18 @@
         <action
             android:id="@+id/action_PlantNewFragment_to_OverviewFragment"
             app:destination="@id/OverviewFragment" />
+        <action
+            android:id="@+id/action_PlantNewFragment_to_CategoryNewFragment"
+            app:destination="@+id/CategoryNewFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/CategoryNewFragment"
+        android:name="cz.habrondrej.garden.CategoryNewFragment"
+        android:label="Category new Fragment"
+        tools:layout="@layout/fragment_category_new">
+        <action
+            android:id="@+id/action_CategoryNewFragment_to_PlantNewFragment"
+            app:destination="@id/PlantNewFragment" />
     </fragment>
 
     <fragment
@@ -32,7 +44,6 @@
         android:name="cz.habrondrej.garden.LoginFragment"
         android:label="Login Fragment"
         tools:layout="@layout/fragment_login">
-
     </fragment>
 
 </navigation>
