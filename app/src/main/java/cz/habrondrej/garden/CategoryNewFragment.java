@@ -24,10 +24,10 @@ import cz.habrondrej.garden.model.categories.Type;
 
 public class CategoryNewFragment extends BaseFragment {
 
-    GroupDatabase groupDatabase;
-    PlaceDatabase placeDatabase;
-    SpeciesDatabase speciesDatabase;
-    TypeDatabase typeDatabase;
+    private GroupDatabase groupDatabase;
+    private PlaceDatabase placeDatabase;
+    private SpeciesDatabase speciesDatabase;
+    private TypeDatabase typeDatabase;
     private String type;
 
     @Override

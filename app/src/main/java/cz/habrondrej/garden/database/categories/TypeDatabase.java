@@ -66,7 +66,7 @@ public class TypeDatabase extends CategoryDatabase<Type> {
         List<Type> types = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_NAME;
+        String query = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_TITLE;
         @SuppressLint("Recycle") Cursor cursor = db.rawQuery(query, null);
 
         if (cursor.moveToFirst()) {

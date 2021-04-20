@@ -18,6 +18,10 @@ import cz.habrondrej.garden.database.categories.PlaceDatabase;
 import cz.habrondrej.garden.database.categories.SpeciesDatabase;
 import cz.habrondrej.garden.database.categories.TypeDatabase;
 import cz.habrondrej.garden.model.Plant;
+import cz.habrondrej.garden.model.categories.Group;
+import cz.habrondrej.garden.model.categories.Place;
+import cz.habrondrej.garden.model.categories.Species;
+import cz.habrondrej.garden.model.categories.Type;
 import cz.habrondrej.garden.utils.DateParser;
 
 public class PlantDatabase extends DatabaseHelper<Plant> {
@@ -104,8 +108,21 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
             int typeId = cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE_ID));
             boolean archive = cursor.getInt(cursor.getColumnIndex(COLUMN_ARCHIVE)) > 0;
 
-            return new Plant(id, title, date, description, groupDatabase.getOneById(groupId), placeDatabase.getOneById(placeId),
-                    speciesDatabase.getOneById(speciesId), typeDatabase.getOneById(typeId), archive);
+            Group group = null;
+            Place place = null;
+            Species species = null;
+            Type type = null;
+
+            if (groupId != 0)
+                group = groupDatabase.getOneById(groupId);
+            if (placeId != 0)
+                place = placeDatabase.getOneById(placeId);
+            if (speciesId != 0)
+                species = speciesDatabase.getOneById(speciesId);
+            if (typeId != 0)
+                type = typeDatabase.getOneById(typeId);
+
+            return new Plant(id, title, date, description, group, place, species, type, archive);
         }
         throw new IndexOutOfBoundsException();
     }
@@ -128,8 +145,27 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
                 String title = cursor.getString(cursor.getColumnIndex(COLUMN_TITLE));
                 String description = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION));
                 LocalDate date = DateParser.parseDate(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
+                boolean archive = cursor.getInt(cursor.getColumnIndex(COLUMN_ARCHIVE)) == 1;
+                int groupId = cursor.getInt(cursor.getColumnIndex(COLUMN_GROUP_ID));
+                int placeId = cursor.getInt(cursor.getColumnIndex(COLUMN_PLACE_ID));
+                int speciesId = cursor.getInt(cursor.getColumnIndex(COLUMN_SPECIES_ID));
+                int typeId = cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE_ID));
 
-                plants.add(new Plant(id, title, date, description));
+                Group group = null;
+                Place place = null;
+                Species species = null;
+                Type type = null;
+
+                if (groupId != 0)
+                    group = groupDatabase.getOneById(groupId);
+                if (placeId != 0)
+                    place = placeDatabase.getOneById(placeId);
+                if (speciesId != 0)
+                    species = speciesDatabase.getOneById(speciesId);
+                if (typeId != 0)
+                    type = typeDatabase.getOneById(typeId);
+
+                plants.add(new Plant(id, title, date, description, group, place, species, type, archive));
                 cursor.moveToNext();
             }
         }

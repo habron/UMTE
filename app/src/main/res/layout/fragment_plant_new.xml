@@ -1,10 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btn_addPlant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="50dp"
+        android:text="Přidat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btn_addType"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_baseline_add_circle_24"
+        app:layout_constraintStart_toEndOf="@+id/sp_type"
+        app:layout_constraintTop_toTopOf="@+id/sp_type" />
+
+    <Button
+        android:id="@+id/btn_addSpecies"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_baseline_add_circle_24"
+        app:layout_constraintStart_toEndOf="@+id/sp_species"
+        app:layout_constraintTop_toTopOf="@+id/sp_species" />
+
+    <Button
+        android:id="@+id/btn_addPlace"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_baseline_add_circle_24"
+        app:layout_constraintStart_toEndOf="@+id/sp_place"
+        app:layout_constraintTop_toTopOf="@+id/sp_place" />
+
+    <Button
+        android:id="@+id/btn_addGroup"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_baseline_add_circle_24"
+        app:layout_constraintStart_toEndOf="@+id/sp_group"
+        app:layout_constraintTop_toTopOf="@+id/sp_group" />
+
+    <EditText
+        android:id="@+id/et_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/et_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:ems="10"
+        android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+    <EditText
+        android:id="@+id/et_description"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/btn_addPlant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <Spinner
+        android:id="@+id/sp_place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView5" />
 
     <TextView
         android:id="@+id/textView"
@@ -83,123 +169,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <EditText
-        android:id="@+id/et_title"
+    <Spinner
+        android:id="@+id/sp_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="50dp"
-        android:ems="10"
-        android:inputType="textPersonName"
+        android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="@+id/textView3" />
 
-    <EditText
-        android:id="@+id/et_date"
+    <Spinner
+        android:id="@+id/sp_species"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="50dp"
-        android:ems="10"
-        android:inputType="date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
-
-    <EditText
-        android:id="@+id/et_description"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/btn_addPlant"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
-    <EditText
-        android:id="@+id/editTextTextPersonName3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_date" />
-
-    <EditText
-        android:id="@+id/editTextTextPersonName4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
-        android:ems="10"
-        android:inputType="textPersonName"
+        android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView4" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName5"
+    <Spinner
+        android:id="@+id/sp_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="50dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView5" />
-
-    <EditText
-        android:id="@+id/editTextTextPersonName6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
-        android:ems="10"
-        android:inputType="textPersonName"
+        android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView6" />
 
-    <Button
-        android:id="@+id/btn_addPlant"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_cancelPlant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="50dp"
-        android:text="Přidat"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/btn_addType"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/ic_baseline_add_circle_24"
-        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName3"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName3" />
-
-    <Button
-        android:id="@+id/btn_addSpecies"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/ic_baseline_add_circle_24"
-        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName4"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName4" />
-
-    <Button
-        android:id="@+id/btn_addPlace"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/ic_baseline_add_circle_24"
-        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName5"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName5" />
-
-    <Button
-        android:id="@+id/btn_addGroup"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/ic_baseline_add_circle_24"
-        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName6"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName6" />
+        android:layout_marginStart="50dp"
+        android:text="Zrušit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_addPlant" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
