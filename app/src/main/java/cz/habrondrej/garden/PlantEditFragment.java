@@ -1,5 +1,8 @@
 package cz.habrondrej.garden;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +33,7 @@ import cz.habrondrej.garden.model.categories.Place;
 import cz.habrondrej.garden.model.categories.Species;
 import cz.habrondrej.garden.model.categories.Type;
 import cz.habrondrej.garden.utils.DateParser;
+import cz.habrondrej.garden.utils.ShakeDetector;
 
 public class PlantEditFragment extends BaseFragment {
 
@@ -38,6 +42,10 @@ public class PlantEditFragment extends BaseFragment {
     private PlaceDatabase placeDatabase;
     private SpeciesDatabase speciesDatabase;
     private TypeDatabase typeDatabase;
+
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private ShakeDetector shakeDetector;
 
     private EditText et_title, et_date, et_description;
     private Spinner sp_group, sp_place, sp_species, sp_type;
@@ -56,6 +64,11 @@ public class PlantEditFragment extends BaseFragment {
         speciesDatabase = mainActivity.getSpeciesDatabase();
         typeDatabase = mainActivity.getTypeDatabase();
 
+        mSensorManager = (SensorManager) mainActivity.getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        shakeDetector = new ShakeDetector();
+        shakeDetector.setOnShakeListener(this::handleShakeEvent);
+
         try {
             int id = getArguments().getInt("plantId");
             plant = plantDatabase.getOneById(id);
@@ -65,6 +78,10 @@ public class PlantEditFragment extends BaseFragment {
         }
 
         return inflater.inflate(R.layout.fragment_plant_edit, container, false);
+    }
+
+    private void handleShakeEvent(int count) {
+
     }
 
     @Override
@@ -223,4 +240,15 @@ public class PlantEditFragment extends BaseFragment {
         return plantDatabase.update(new Plant(plant.getId(), et_title.getText().toString(), date, et_description.getText().toString(), group, place, species, type, plant.isArchive()));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(shakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(shakeDetector);
+    }
 }
