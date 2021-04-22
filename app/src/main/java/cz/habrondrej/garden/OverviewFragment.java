@@ -68,7 +68,7 @@ public class OverviewFragment extends BaseFragment {
 
         List<Plant> plants = plantDatabase.getAll();
 
-        plantsAdapter = new PlantsAdapter(plants, getContext());
+        plantsAdapter = new PlantsAdapter(plants, getContext(), this);
         recyclerView.setAdapter(plantsAdapter);
     }
 }

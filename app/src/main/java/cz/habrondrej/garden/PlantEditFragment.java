@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -30,7 +31,7 @@ import cz.habrondrej.garden.model.categories.Species;
 import cz.habrondrej.garden.model.categories.Type;
 import cz.habrondrej.garden.utils.DateParser;
 
-public class PlantNewFragment extends BaseFragment {
+public class PlantEditFragment extends BaseFragment {
 
     private GroupDatabase groupDatabase;
     private PlantDatabase plantDatabase;
@@ -43,6 +44,8 @@ public class PlantNewFragment extends BaseFragment {
 
     private int[] groupsIds, placesIds, speciesIds, typesIds;
 
+    private Plant plant;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         MainActivity mainActivity = (MainActivity) getActivity();
@@ -53,34 +56,51 @@ public class PlantNewFragment extends BaseFragment {
         speciesDatabase = mainActivity.getSpeciesDatabase();
         typeDatabase = mainActivity.getTypeDatabase();
 
-        return inflater.inflate(R.layout.fragment_plant_new, container, false);
+        try {
+            int id = getArguments().getInt("plantId");
+            plant = plantDatabase.getOneById(id);
+        } catch (Exception e) {
+            NavHostFragment.findNavController(PlantEditFragment.this)
+                    .navigate(R.id.action_PlantEditFragment_to_OverviewFragment);
+        }
+
+        return inflater.inflate(R.layout.fragment_plant_edit, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("Přidat rostlinu");
+        toolbar.setTitle(plant.getTitle());
 
         initSpinners(view);
-        handleCategoryButtons(view);
 
-        Button btn_addPlant = view.findViewById(R.id.btn_addPlant);
+        Button btn_savePlant = view.findViewById(R.id.btn_savePlant);
         AppCompatButton btn_cancelPlant = view.findViewById(R.id.btn_cancelPlant);
 
         et_title = view.findViewById(R.id.et_title);
         et_date = view.findViewById(R.id.et_date);
         et_description = view.findViewById(R.id.et_description);
+        setDefaultValues();
 
-        btn_addPlant.setOnClickListener(v -> {
-            if (addPlant())
-                NavHostFragment.findNavController(PlantNewFragment.this)
-                    .navigate(R.id.action_PlantNewFragment_to_OverviewFragment);
+        btn_savePlant.setOnClickListener(v -> {
+            String message = "Změny se nepodařilo uložit!";
+            if (updatePlant())
+                message = "Změny uloženy";
+
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         });
 
-        btn_cancelPlant.setOnClickListener(v -> NavHostFragment.findNavController(PlantNewFragment.this)
-                .navigate(R.id.action_PlantNewFragment_to_OverviewFragment));
+        btn_cancelPlant.setOnClickListener(v -> NavHostFragment.findNavController(PlantEditFragment.this)
+                .navigate(R.id.action_PlantEditFragment_to_OverviewFragment));
 
+    }
+
+    private void setDefaultValues() {
+        et_title.setText(plant.getTitle());
+        if (plant.getDate() != null) et_date.setText(plant.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        et_description.setText(plant.getDescription());
     }
 
     private void initSpinners(View view) {
@@ -111,18 +131,52 @@ public class PlantNewFragment extends BaseFragment {
         items[0] = "";
         ids[0] = -1;
 
+        int selectedPos = 0;
         int i = 1;
         for (Category category : categories) {
             items[i] = category.getTitle();
             ids[i] = category.getId();
+
+            if (isSpinnerDefaultVal(category))
+                selectedPos = i;
+
             i++;
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, items);
         spinner.setAdapter(adapter);
+        spinner.setSelection(selectedPos);
     }
 
-    private boolean addPlant() {
+    private boolean isSpinnerDefaultVal(Category category) {
+        if (category instanceof Group) {
+            if (plant.getGroup() != null)
+                return category.getId() == plant.getGroup().getId();
+            return false;
+        }
+
+        if (category instanceof Place) {
+            if (plant.getPlace() != null)
+                return category.getId() == plant.getPlace().getId();
+            return false;
+        }
+
+        if (category instanceof Species) {
+            if (plant.getSpecies() != null)
+                return category.getId() == plant.getSpecies().getId();
+            return false;
+        }
+
+        if (category instanceof Type) {
+            if (plant.getType() != null)
+                return category.getId() == plant.getType().getId();
+            return false;
+        }
+
+        return false;
+    }
+
+    private boolean updatePlant() {
 
         if (et_title.getText().toString().trim().isEmpty()) {
             Toast.makeText(getContext(), "Nejsou vyplněny všechny potřebné údaje!", Toast.LENGTH_SHORT).show();
@@ -166,38 +220,7 @@ public class PlantNewFragment extends BaseFragment {
             } catch (Exception ignored) {}
         }
 
-        return plantDatabase.create(new Plant(-1, et_title.getText().toString(), date, et_description.getText().toString(), group, place, species, type, false));
+        return plantDatabase.update(new Plant(plant.getId(), et_title.getText().toString(), date, et_description.getText().toString(), group, place, species, type, plant.isArchive()));
     }
 
-    private void handleCategoryButtons(View view) {
-        Button btn_addGroup = view.findViewById(R.id.btn_addGroup);
-        Button btn_addPlace = view.findViewById(R.id.btn_addPlace);
-        Button btn_addSpecies = view.findViewById(R.id.btn_addSpecies);
-        Button btn_addType = view.findViewById(R.id.btn_addType);
-        Bundle bundle = new Bundle();
-
-        btn_addGroup.setOnClickListener(v -> {
-            bundle.putString("type", Category.TYPE_GROUP);
-            NavHostFragment.findNavController(PlantNewFragment.this)
-                    .navigate(R.id.action_PlantNewFragment_to_CategoryNewFragment, bundle);
-        });
-
-        btn_addPlace.setOnClickListener(v -> {
-            bundle.putString("type", Category.TYPE_PLACE);
-            NavHostFragment.findNavController(PlantNewFragment.this)
-                    .navigate(R.id.action_PlantNewFragment_to_CategoryNewFragment, bundle);
-        });
-
-        btn_addSpecies.setOnClickListener(v -> {
-            bundle.putString("type", Category.TYPE_SPECIES);
-            NavHostFragment.findNavController(PlantNewFragment.this)
-                    .navigate(R.id.action_PlantNewFragment_to_CategoryNewFragment, bundle);
-        });
-
-        btn_addType.setOnClickListener(v -> {
-            bundle.putString("type", Category.TYPE_TYPE);
-            NavHostFragment.findNavController(PlantNewFragment.this)
-                    .navigate(R.id.action_PlantNewFragment_to_CategoryNewFragment, bundle);
-        });
-    }
 }

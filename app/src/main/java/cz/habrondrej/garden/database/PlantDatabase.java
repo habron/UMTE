@@ -179,12 +179,12 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
         SQLiteDatabase db = getWritableDatabase();
 
         cv.put(COLUMN_TITLE, plant.getTitle());
-        cv.put(COLUMN_DATE, plant.getDate().toString());
+        cv.put(COLUMN_DATE, plant.getDate() == null ? null : plant.getDate().toString());
         cv.put(COLUMN_DESCRIPTION, plant.getDescription());
-        cv.put(COLUMN_GROUP_ID, plant.getGroup().getId());
-        cv.put(COLUMN_PLACE_ID, plant.getPlace().getId());
-        cv.put(COLUMN_SPECIES_ID, plant.getSpecies().getId());
-        cv.put(COLUMN_TYPE_ID, plant.getType().getId());
+        cv.put(COLUMN_GROUP_ID, plant.getGroup() == null ? null : plant.getGroup().getId());
+        cv.put(COLUMN_PLACE_ID, plant.getPlace() == null ? null : plant.getPlace().getId());
+        cv.put(COLUMN_SPECIES_ID, plant.getSpecies() == null ? null : plant.getSpecies().getId());
+        cv.put(COLUMN_TYPE_ID, plant.getType() == null ? null : plant.getType().getId());
         cv.put(COLUMN_ARCHIVE, plant.isArchive());
         long update = db.update(TABLE_NAME, cv, COLUMN_ID + " = ?", new String[]{String.valueOf(plant.getId())});
 
