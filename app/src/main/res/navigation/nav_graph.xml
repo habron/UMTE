@@ -37,10 +37,12 @@
         android:name="cz.habrondrej.garden.PlantEditFragment"
         android:label="Plant edit Fragment"
         tools:layout="@layout/fragment_plant_edit">
-
         <action
             android:id="@+id/action_PlantEditFragment_to_OverviewFragment"
             app:destination="@id/OverviewFragment" />
+        <action
+            android:id="@+id/action_PlantEditFragment_to_CameraFragment"
+            app:destination="@id/CameraFragment"/>
     </fragment>
     <fragment
         android:id="@+id/CategoryNewFragment"
@@ -57,6 +59,16 @@
         android:name="cz.habrondrej.garden.LoginFragment"
         android:label="Login Fragment"
         tools:layout="@layout/fragment_login">
+    </fragment>
+
+    <fragment
+        android:id="@+id/CameraFragment"
+        android:name="cz.habrondrej.garden.CameraFragment"
+        android:label="Camera Fragment"
+        tools:layout="@layout/fragment_camera">
+        <action
+            android:id="@+id/action_CameraFragment_to_PlantEditFragment"
+            app:destination="@id/PlantEditFragment" />
     </fragment>
 
 </navigation>
