@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -71,6 +72,8 @@ public class PlantNewFragment extends BaseFragment {
         et_title = view.findViewById(R.id.et_title);
         et_date = view.findViewById(R.id.et_date);
         et_description = view.findViewById(R.id.et_description);
+
+        et_date.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
 
         btn_addPlant.setOnClickListener(v -> {
             if (addPlant())

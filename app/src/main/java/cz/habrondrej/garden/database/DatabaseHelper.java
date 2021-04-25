@@ -11,7 +11,7 @@ import cz.habrondrej.garden.database.categories.CategoryDatabase;
 
 public abstract class DatabaseHelper<T> extends SQLiteOpenHelper implements IRepository<T> {
 
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2;
 
     public DatabaseHelper(@Nullable Context context) {
         this(context, "garden.db", null, DB_VERSION);
@@ -26,6 +26,7 @@ public abstract class DatabaseHelper<T> extends SQLiteOpenHelper implements IRep
         UserDatabase.onCreateDB(db);
         CategoryDatabase.onCreateDB(db);
         PlantDatabase.onCreateDB(db);
+        PhotoDatabase.onCreateDB(db);
     }
 
     @Override
@@ -33,6 +34,7 @@ public abstract class DatabaseHelper<T> extends SQLiteOpenHelper implements IRep
         UserDatabase.onUpgradeDB(db, oldVersion, newVersion);
         CategoryDatabase.onUpgradeDB(db, oldVersion, newVersion);
         PlantDatabase.onUpgradeDB(db, oldVersion, newVersion);
+        PhotoDatabase.onUpgradeDB(db, oldVersion, newVersion);
     }
 
 }

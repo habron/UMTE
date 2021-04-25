@@ -2,6 +2,7 @@ package cz.habrondrej.garden;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import cz.habrondrej.garden.database.PhotoDatabase;
 import cz.habrondrej.garden.database.PlantDatabase;
 import cz.habrondrej.garden.database.UserDatabase;
 import cz.habrondrej.garden.database.categories.GroupDatabase;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 public class MainActivity extends AppCompatActivity {
 
     private GroupDatabase groupDatabase;
+    private PhotoDatabase photoDatabase;
     private PlaceDatabase placeDatabase;
     private PlantDatabase plantDatabase;
     private SpeciesDatabase speciesDatabase;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         groupDatabase = new GroupDatabase(getApplicationContext());
+        photoDatabase = new PhotoDatabase(getApplicationContext());
         placeDatabase = new PlaceDatabase(getApplicationContext());
         plantDatabase = new PlantDatabase(getApplicationContext());
         speciesDatabase = new SpeciesDatabase(getApplicationContext());
@@ -44,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
     public GroupDatabase getGroupDatabase() {
         return groupDatabase;
+    }
+
+    public PhotoDatabase getPhotoDatabase() {
+        return photoDatabase;
     }
 
     public PlaceDatabase getPlaceDatabase() {

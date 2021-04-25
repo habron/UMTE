@@ -37,10 +37,10 @@ public class PlantDatabase extends DatabaseHelper<Plant> {
     public static final String COLUMN_TYPE_ID = "TYPE_ID";
     public static final String COLUMN_ARCHIVE = "ARCHIVE";
 
-    private GroupDatabase groupDatabase;
-    private PlaceDatabase placeDatabase;
-    private SpeciesDatabase speciesDatabase;
-    private TypeDatabase typeDatabase;
+    private final GroupDatabase groupDatabase;
+    private final PlaceDatabase placeDatabase;
+    private final SpeciesDatabase speciesDatabase;
+    private final TypeDatabase typeDatabase;
 
     private static final String DATABASE_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

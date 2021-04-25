@@ -81,8 +81,11 @@ public class PlantEditFragment extends BaseFragment {
     }
 
     private void handleShakeEvent(int count) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("plantId", plant.getId());
+
         NavHostFragment.findNavController(this)
-                .navigate(R.id.action_PlantEditFragment_to_CameraFragment);
+                .navigate(R.id.action_PlantEditFragment_to_CameraFragment, bundle);
     }
 
     @Override
