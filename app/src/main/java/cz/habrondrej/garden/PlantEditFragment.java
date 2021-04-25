@@ -21,11 +21,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import cz.habrondrej.garden.adapters.GalleryAdapter;
+import cz.habrondrej.garden.database.PhotoDatabase;
 import cz.habrondrej.garden.database.PlantDatabase;
 import cz.habrondrej.garden.database.categories.GroupDatabase;
 import cz.habrondrej.garden.database.categories.PlaceDatabase;
 import cz.habrondrej.garden.database.categories.SpeciesDatabase;
 import cz.habrondrej.garden.database.categories.TypeDatabase;
+import cz.habrondrej.garden.model.Photo;
 import cz.habrondrej.garden.model.Plant;
 import cz.habrondrej.garden.model.categories.Category;
 import cz.habrondrej.garden.model.categories.Group;
@@ -38,6 +43,7 @@ import cz.habrondrej.garden.utils.ShakeDetector;
 public class PlantEditFragment extends BaseFragment {
 
     private GroupDatabase groupDatabase;
+    private PhotoDatabase photoDatabase;
     private PlantDatabase plantDatabase;
     private PlaceDatabase placeDatabase;
     private SpeciesDatabase speciesDatabase;
@@ -49,6 +55,7 @@ public class PlantEditFragment extends BaseFragment {
 
     private EditText et_title, et_date, et_description;
     private Spinner sp_group, sp_place, sp_species, sp_type;
+    private RecyclerView lv_photoList;
 
     private int[] groupsIds, placesIds, speciesIds, typesIds;
 
@@ -59,6 +66,7 @@ public class PlantEditFragment extends BaseFragment {
         MainActivity mainActivity = (MainActivity) getActivity();
 
         groupDatabase = mainActivity.getGroupDatabase();
+        photoDatabase = mainActivity.getPhotoDatabase();
         plantDatabase = mainActivity.getPlantDatabase();
         placeDatabase = mainActivity.getPlaceDatabase();
         speciesDatabase = mainActivity.getSpeciesDatabase();
@@ -103,6 +111,7 @@ public class PlantEditFragment extends BaseFragment {
         et_title = view.findViewById(R.id.et_title);
         et_date = view.findViewById(R.id.et_date);
         et_description = view.findViewById(R.id.et_description);
+        lv_photoList = view.findViewById(R.id.lv_photoList);
         setDefaultValues();
 
         btn_savePlant.setOnClickListener(v -> {
@@ -122,6 +131,13 @@ public class PlantEditFragment extends BaseFragment {
         et_title.setText(plant.getTitle());
         if (plant.getDate() != null) et_date.setText(plant.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
         et_description.setText(plant.getDescription());
+
+        lv_photoList.setHasFixedSize(true);
+        lv_photoList.setLayoutManager(new GridLayoutManager(getContext(), 4));
+
+        List<Photo> photos = photoDatabase.getByPlantId(plant.getId());
+        lv_photoList.setHasFixedSize(false);
+        lv_photoList.setAdapter(new GalleryAdapter(photos, getContext(), this));
     }
 
     private void initSpinners(View view) {
